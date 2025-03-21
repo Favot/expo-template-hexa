@@ -1,7 +1,6 @@
 import { useServiceRegistry } from '@/gateway/serviceRegistry'
 import { createContext, useCallback, useContext, useEffect, useReducer, type PropsWithChildren } from 'react'
 import { Session } from '../domain/session/session'
-import { StorageKey } from '../gateway/services/storageClient'
 
 
 type AuthContextType = {
@@ -31,7 +30,7 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: PropsWithChildren) {
-  const [[isLoading, sessionData], setSession] = useStorageState('auth.token' as StorageKey)
+  const [[isLoading, sessionData], setSession] = useStorageState()
 
   const session: Session | null = sessionData ? JSON.parse(sessionData) : null
 
@@ -71,7 +70,7 @@ function useAsyncState<T>(
 }
 
 
-export function useStorageState(key: StorageKey): UseStateHook<string> {
+ function useStorageState(): UseStateHook<string> {
   const [state, setState] = useAsyncState<string>()
   const { sessionService } = useServiceRegistry()
 

@@ -4,6 +4,7 @@ export type StorageKey =
   | 'app.settings'
   | 'app.theme'
   | 'app.language'
+  | 'session'
 
 export type StorageClient = {
   getItem: (key: StorageKey) => Promise<string | null>

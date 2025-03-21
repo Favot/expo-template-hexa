@@ -6,15 +6,14 @@ import {
 } from "../services/restClient"
 
 export const fetchClient: RestClient = {
-  httpRequest: async (url, options = {}) => {
-    const s = {
-      accessToken: "TOKEN",
-    } // TODO: Get token from storage
+  httpRequest: async (url, options = {}, session) => {
     const overridingOptions: RequestInit = {
       ...options,
       headers: {
         ...options?.headers,
-        Authorization: `Bearer ${s?.accessToken}`,
+        ...(session?.tokens && {
+          Authorization: `${session.tokens.tokenType} ${session.tokens.accessToken}`,
+        }),
       },
     }
     return fetch(url, overridingOptions)

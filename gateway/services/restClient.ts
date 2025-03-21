@@ -1,7 +1,11 @@
+import { Session } from "@/domain/session/session"
+
+
 export type RestClient = {
   httpRequest: (
     input: string | URL | globalThis.Request,
     init?: RequestInit,
+    session?: Session
   ) => Promise<Response>
 }
 

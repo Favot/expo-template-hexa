@@ -1,21 +1,27 @@
-import { useServiceRegistry } from '@/gateway/serviceRegistry'
-import { createContext, useCallback, useContext, useEffect, useReducer, type PropsWithChildren } from 'react'
-import { Session } from '../domain/session/session'
-
+import { useServiceRegistry } from '@/gateway/serviceRegistry';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  type PropsWithChildren,
+} from 'react';
+import { Session } from '../domain/session/session';
 
 type AuthContextType = {
-  signIn: (tokens: Session['tokens']) => void
-  signOut: () => void
-  session: Session | null
-  isLoading: boolean
-}
+  signIn: (tokens: Session['tokens']) => void;
+  signOut: () => void;
+  session: Session | null;
+  isLoading: boolean;
+};
 
 const AuthContext = createContext<AuthContextType>({
   signIn: () => null,
   signOut: () => null,
   session: null,
   isLoading: false,
-})
+});
 
 // This hook can be used to access the user info.
 export function useSession() {
@@ -30,21 +36,21 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: PropsWithChildren) {
-  const [[isLoading, sessionData], setSession] = useStorageState()
+  const [[isLoading, sessionData], setSession] = useStorageState();
 
-  const session: Session | null = sessionData ? JSON.parse(sessionData) : null
+  const session: Session | null = sessionData ? JSON.parse(sessionData) : null;
 
   const signIn = useCallback((tokens: Session['tokens']) => {
     const newSession: Session = {
       state: 'authenticated',
       tokens,
-    }
-    setSession(JSON.stringify(newSession))
-  }, [])
+    };
+    setSession(JSON.stringify(newSession));
+  }, []);
 
   const signOut = useCallback(() => {
-    setSession(null)
-  }, [])
+    setSession(null);
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -53,49 +59,44 @@ export function SessionProvider({ children }: PropsWithChildren) {
         signOut,
         session,
         isLoading,
-      }}>
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
-type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void]
+type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void];
 
-function useAsyncState<T>(
-  initialValue: [boolean, T | null] = [true, null],
-): UseStateHook<T> {
+function useAsyncState<T>(initialValue: [boolean, T | null] = [true, null]): UseStateHook<T> {
   return useReducer(
     (state: [boolean, T | null], action: T | null = null): [boolean, T | null] => [false, action],
     initialValue
-  ) as UseStateHook<T>
+  ) as UseStateHook<T>;
 }
 
-
- function useStorageState(): UseStateHook<string> {
-  const [state, setState] = useAsyncState<string>()
-  const { sessionService } = useServiceRegistry()
-
+function useStorageState(): UseStateHook<string> {
+  const [state, setState] = useAsyncState<string>();
+  const { sessionService } = useServiceRegistry();
 
   // Get
   useEffect(() => {
     sessionService.getSession().then((value: Session | null) => {
-      setState(value ? JSON.stringify(value) : null)
-    })
-  }, [sessionService])
+      setState(value ? JSON.stringify(value) : null);
+    });
+  }, [sessionService]);
 
   // Set
   const setValue = useCallback(
     (value: string | null) => {
-      setState(value)
+      setState(value);
       if (value === null) {
-        sessionService.removeSession()
+        sessionService.removeSession();
       } else {
-        sessionService.setSession(JSON.parse(value))
+        sessionService.setSession(JSON.parse(value));
       }
     },
     [sessionService]
-  )
+  );
 
-  return [state, setValue]
+  return [state, setValue];
 }
-
-

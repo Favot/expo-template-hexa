@@ -1,9 +1,4 @@
-
-import {
-  AuthenticationError,
-  NetworkError,
-  RestClient,
-} from "../services/restClient"
+import { AuthenticationError, NetworkError, RestClient } from '../services/restClient';
 
 export const fetchClient: RestClient = {
   httpRequest: async (url, options = {}, session) => {
@@ -15,23 +10,23 @@ export const fetchClient: RestClient = {
           Authorization: `${session.tokens.tokenType} ${session.tokens.accessToken}`,
         }),
       },
-    }
-    return fetch(url, overridingOptions)
+    };
+    return fetch(url, overridingOptions);
   },
-}
+};
 
 export const assertValidResponse = async (response: Response) => {
   if (response.ok) {
-    return
+    return;
   }
   if (response.status === 401) {
-    throw new AuthenticationError("Authentication failed")
+    throw new AuthenticationError('Authentication failed');
   }
-  const { error, message } = await response.json()
-  throw new NetworkError("Request failed", {
+  const { error, message } = await response.json();
+  throw new NetworkError('Request failed', {
     url: response.url,
     status: response.status,
     bodyError: error,
     bodyMessage: message,
-  })
-}
+  });
+};

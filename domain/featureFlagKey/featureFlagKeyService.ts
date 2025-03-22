@@ -1,5 +1,5 @@
-import { FeatureFlagKey } from "./featureFlagKey"
+import { FeatureFlagKey } from './featureFlagKey';
 
 export type FeatureFlippingService = {
-    isFeatureFlagActivated(featureFlagKey: FeatureFlagKey): Promise<Boolean>
-}
+  isFeatureFlagActivated(featureFlagKey: FeatureFlagKey): Promise<Boolean>;
+};

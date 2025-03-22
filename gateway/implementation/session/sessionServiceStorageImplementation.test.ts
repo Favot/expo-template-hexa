@@ -1,18 +1,17 @@
 import { Session } from '@/domain'
 import * as infrastructureRegistry from '@/gateway/infrastructureRegistry'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { sessionServiceStorageImplementation } from './sessionServiceStorageImplementation'
 
 // Mock the infrastructure registry
-vi.mock('@/gateway/infrastructureRegistry', () => ({
-  getInfrastructureRegistry: vi.fn(),
+jest.mock('@/gateway/infrastructureRegistry', () => ({
+  getInfrastructureRegistry: jest.fn(),
 }))
 
 describe('sessionServiceStorageImplementation', () => {
   const mockStorageClient = {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
+    getItem: jest.fn(),
+    setItem: jest.fn(),
+    removeItem: jest.fn(),
   }
 
   // Mock session data
@@ -37,13 +36,13 @@ describe('sessionServiceStorageImplementation', () => {
 
   beforeEach(() => {
     // Reset all mocks before each test
-    vi.clearAllMocks()
+    jest.clearAllMocks()
     // Setup the mock infrastructure registry
-    vi.mocked(infrastructureRegistry.getInfrastructureRegistry).mockReturnValue({
+    jest.mocked(infrastructureRegistry.getInfrastructureRegistry).mockReturnValue({
       storageClient: mockStorageClient,
     } as any)
     // Spy on console.error
-    vi.spyOn(console, 'error').mockImplementation(() => {})
+    jest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   describe('getSession', () => {

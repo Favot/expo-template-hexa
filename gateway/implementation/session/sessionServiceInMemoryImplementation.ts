@@ -19,7 +19,6 @@ const getSession = async (): Promise<Session | null> => {
           roles: ["role1", "role2"],
           permissions: ["permission1", "permission2"],
         },
-      
       }
       
       resolve(session)

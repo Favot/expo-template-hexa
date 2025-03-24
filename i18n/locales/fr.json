@@ -1,20 +1,23 @@
 {
-  "common": {
-    "welcome": "Bienvenue",
-    "loading": "Chargement...",
-    "error": "Erreur",
-    "success": "Succès"
-  },
   "auth": {
-    "signIn": "Se connecter",
-    "signOut": "Se déconnecter",
     "email": "Email",
-    "password": "Mot de passe"
+    "password": "Mot de passe",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter"
+  },
+  "common": {
+    "error": "Erreur",
+    "errors": {
+      "fieldRequired": "Champ requis"
+    },
+    "loading": "Chargement...",
+    "success": "Succès",
+    "welcome": "Bienvenue"
   },
   "settings": {
-    "title": "Paramètres",
+    "darkMode": "Mode sombre",
     "language": "Langue",
     "theme": "Thème",
-    "darkMode": "Mode sombre"
+    "title": "Paramètres"
   }
 }

@@ -1,5 +1,5 @@
-import { Text } from '@/components/ui/atoms/text';
-import { ThemeToggle } from '@/components/ui/molecules/generic/ThemeToggle';
+import { Text } from '@/components/atoms/text';
+import { ThemeToggle } from '@/components/molecules/generic/ThemeToggle';
 import { StyleSheet, View } from 'react-native';
 export default function HomeScreen() {
   return <OnMountExample />;

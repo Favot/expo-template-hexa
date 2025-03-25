@@ -1,3 +1,6 @@
+import { Input } from '@/components/atoms';
+import { Skeleton } from '@/components/atoms/skeleton';
+import { H1 } from '@/components/atoms/typography';
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { Link } from 'expo-router';
 import React from 'react';
@@ -41,20 +44,21 @@ export default function SignUp() {
   };
 
   return (
-    <View style={styles.container}>
+    <View>
+      <Skeleton className="h-12 w-12 rounded-full" />
       <form
         onSubmit={e => {
           e.preventDefault();
           form.handleSubmit();
         }}
       >
-        <Text style={styles.title}>Sign Up</Text>
+        <H1>Sign Up</H1>
         <View>
           <form.Field
             name="username"
             children={field => (
               <>
-                <TextInput placeholder="Full Name" style={styles.input} />
+                <Input placeholder="Full Name" />
                 {field.state.meta.errors ? (
                   <Text style={styles.errorText}>{field.state.meta.errors[0]?.message}</Text>
                 ) : null}
@@ -65,7 +69,7 @@ export default function SignUp() {
             name="password"
             children={field => (
               <>
-                <TextInput placeholder="password" style={styles.input} />
+                <Input placeholder="password" />
                 {field.state.meta.errors ? (
                   <Text style={styles.errorText}>{field.state.meta.errors[0]?.message}</Text>
                 ) : null}

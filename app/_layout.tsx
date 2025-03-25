@@ -1,53 +1,78 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { useFonts } from 'expo-font'
-import * as SplashScreen from 'expo-splash-screen'
-import { StatusBar } from 'expo-status-bar'
-import { useEffect } from 'react'
-import { I18nextProvider } from 'react-i18next'
-import 'react-native-reanimated'
+import { TanStackFormProvider } from '@/components/providers/FormProvider';
+import { SessionProvider } from '@/context/sessionContext';
+import { NAV_THEME, useColorScheme, useIsomorphicLayoutEffect } from '@/lib';
+import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { Slot } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import * as React from 'react';
+import { useEffect } from 'react';
+import { I18nextProvider } from 'react-i18next';
+import { Platform } from 'react-native';
+import 'react-native-reanimated';
+import '../global.css';
+import i18n from '../i18n/i18n';
 
-import { SessionProvider } from '@/context/sessionContext'
-import { TanStackFormProvider } from '@/components/providers/FormProvider'
-import { Slot } from 'expo-router'
-import { useColorScheme } from '../hooks/useColorScheme'
-import i18n from '../i18n/i18n'
-
+const LIGHT_THEME: Theme = {
+  ...DefaultTheme,
+  colors: NAV_THEME.light,
+};
+const DARK_THEME: Theme = {
+  ...DarkTheme,
+  colors: NAV_THEME.dark,
+};
 
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary
-} from "expo-router"
-
+  ErrorBoundary,
+} from 'expo-router';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync()
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme()
-  const [loaded] = useFonts({
+  const hasMounted = React.useRef(false);
+  const { isDarkColorScheme } = useColorScheme();
+  const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+
+  const [isFontloaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  })
+  });
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync()
+    if (isFontloaded && isColorSchemeLoaded) {
+      SplashScreen.hideAsync();
     }
-  }, [loaded])
+  }, [isFontloaded, isColorSchemeLoaded]);
 
-  if (!loaded) {
-    return null
+  useIsomorphicLayoutEffect(() => {
+    if (hasMounted.current) {
+      return;
+    }
+
+    if (Platform.OS === 'web') {
+      // Adds the background color to the html element to prevent white background on overscroll.
+      document.documentElement.classList.add('bg-background');
+    }
+    setIsColorSchemeLoaded(true);
+    hasMounted.current = true;
+  }, []);
+
+  if (!isColorSchemeLoaded || !isFontloaded) {
+    return null;
   }
 
   return (
     <I18nextProvider i18n={i18n}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
         <SessionProvider>
           <TanStackFormProvider>
             <Slot />
           </TanStackFormProvider>
         </SessionProvider>
-        <StatusBar style="auto" />
       </ThemeProvider>
     </I18nextProvider>
-  )
+  );
 }

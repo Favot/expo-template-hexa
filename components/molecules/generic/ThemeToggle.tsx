@@ -1,5 +1,6 @@
 import { cn, useColorScheme } from '@/lib';
 import { setAndroidNavigationBar } from '@/lib/desing/androidNavigationBar';
+import React from 'react';
 import { Pressable, View } from 'react-native';
 import { MoonStar } from '../../atoms/icons/MoonStar';
 import { Sun } from '../../atoms/icons/Sun';

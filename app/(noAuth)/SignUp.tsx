@@ -1,5 +1,4 @@
 import { Input } from '@/components/atoms';
-import { Skeleton } from '@/components/atoms/skeleton';
 import { H1 } from '@/components/atoms/typography';
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { Link } from 'expo-router';
@@ -45,7 +44,6 @@ export default function SignUp() {
 
   return (
     <View>
-      <Skeleton className="h-12 w-12 rounded-full" />
       <form
         onSubmit={e => {
           e.preventDefault();

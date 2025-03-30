@@ -1,5 +1,6 @@
 import '@/global.css';
 import { GluestackUIProvider } from '@/lib/gluestack-ui-provider';
+import Constants from 'expo-constants';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -14,7 +15,7 @@ import i18n from '../i18n/i18n';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -42,3 +43,12 @@ export default function RootLayout() {
     </GluestackUIProvider>
   );
 }
+
+// Conditionally export Storybook or the main App layout
+let AppEntryPoint = RootLayout;
+if (Constants.expoConfig?.extra?.storybookEnabled === 'true') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  AppEntryPoint = require('../.storybook').default;
+}
+
+export default AppEntryPoint;

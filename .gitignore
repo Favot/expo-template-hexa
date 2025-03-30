@@ -41,3 +41,8 @@ app-example
 .env
 .env.local
 
+# Generated source files (JS from TS)
+app/**/*.js
+app/**/*.js.map
+components/**/*.js     # Uncomment if you have a components dir with the same issue
+components/**/*.js.map # Uncomment if you have a components dir with the same issue

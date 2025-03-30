@@ -1,6 +1,5 @@
 import '@/global.css';
 import { GluestackUIProvider } from '@/lib/gluestack-ui-provider';
-import Constants from 'expo-constants';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -44,11 +43,7 @@ function RootLayout() {
   );
 }
 
-// Conditionally export Storybook or the main App layout
-let AppEntryPoint = RootLayout;
-if (Constants.expoConfig?.extra?.storybookEnabled === 'true') {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  AppEntryPoint = require('../.storybook').default;
-}
-
-export default AppEntryPoint;
+// Export the appropriate entry point based on environment configuration
+export default process.env.EXPO_PUBLIC_STORYBOOK_ENABLED === 'true'
+  ? require('../.storybook').default
+  : RootLayout;
